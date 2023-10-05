@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+PatientChallenge.Site/patientchallengesite/package-lock.json
