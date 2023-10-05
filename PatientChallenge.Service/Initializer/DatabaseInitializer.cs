@@ -1,10 +1,5 @@
 ﻿using Dapper;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PatientChallenge.Service.Initializer
 {
@@ -12,8 +7,12 @@ namespace PatientChallenge.Service.Initializer
     {
         public static async Task EnsureDatabaseInitializationAsync(string connectionString)
         {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(connectionString);
+            builder.InitialCatalog = string.Empty;  // Remove the Initial Catalog
+
+            string updatedConnectionString = builder.ToString();
             string adminPassword = BCrypt.Net.BCrypt.HashPassword("4dmin");
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(updatedConnectionString))
             {
                 string createDatabaseQuery = $@"
                 IF NOT EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = 'PatientDB')

@@ -54,3 +54,5 @@ You will count with a master credential which is
 username: admin
 <br>
 password: 4dmin
+
+Database is auto-created and auto-populated during the first run by the DatabaseInitializer class

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PatientChallenge.Shared.Model
+﻿namespace PatientChallenge.Shared.Model
 {
     public class JwtSettings
     {
