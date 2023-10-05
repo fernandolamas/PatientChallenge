@@ -1,5 +1,7 @@
 # PatientChallenge
 
+<br>
+
 ## Index
 
 [About](#about)<br>
@@ -10,11 +12,15 @@
 [Known issues](#known-issues)<br>
 [Notes](#notes)
 
+<br>
+
 ## About
 
 This project is an application developer interview test, a CRUD done using .NET 6 and ReactJs, you must be able to authenticate and validate a Patient model.
 
 The main goal is to prove my programming skills and show what I am capable of.
+
+<br>
 
 ## Pre requisites
 
@@ -22,6 +28,8 @@ The main goal is to prove my programming skills and show what I am capable of.
 2. SQL Server Express LocalDB
 3. NodeJS 18.16.0 or higher
 4. NPM
+   
+<br>
 
 ## Installation
 
@@ -31,22 +39,30 @@ The main goal is to prove my programming skills and show what I am capable of.
 4. Open a terminal command prompt and type npm install.
 
 If you don't encounter any issues, then you are ready to start.
-
+<br>
 ## Running the project 
 
 1. Open the solution using Visual Studio 2022 and then, click Run.
 2. Navigate to PatientChallenge\PatientChallenge.Site\patientchallengesite\ folder.
 3. Open the terminal command prompt and type: npm start
+   
+<br>
 
 ## Unit Testing
 
 Inside the Visual Studio solution you will find a test suite made for every endpoint using Moq.
+
+<br>
 
 ## Known issues
 
 - The models were made without DTOs [See information about DTOs](https://go.microsoft.com/fwlink/?linkid=2123754).
 - The role is just a demonstration property and both the user and the administrator have the same rights.
 - PatientChallenge.Site could be optimized with DRY programming principle practices.
+- No logger implemented.
+  
+<br>
+
 ## Notes
 
 You will count with a master credential which is 
