@@ -87,7 +87,6 @@ const UpdatePatient = () => {
               break;
           }
         }else{
-          // Reset form fields after submission
           setName('');
           setUsername('');
           setPassword('');

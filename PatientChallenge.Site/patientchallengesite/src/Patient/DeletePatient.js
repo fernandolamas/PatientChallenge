@@ -3,16 +3,12 @@ import {endpoint} from '../endpoints';
 
 const DeletePatientById = () => {
   const [patientId, setPatientId] = useState('');
-  const [patient, setPatient] = useState(null);
 
   const handlePatientIdChange = (e) => {
     setPatientId(e.target.value);
   };
 
   const handleFetchPatient = () => {
-    // TODO: Add logic to fetch patient by ID
-    // For this example, let's assume you have an API endpoint to fetch a patient by ID
-    // Replace the API endpoint and add the fetch logic accordingly
     fetch(`${endpoint.Patient}?id=${patientId}`, {
       method:"DELETE",
       headers: {
