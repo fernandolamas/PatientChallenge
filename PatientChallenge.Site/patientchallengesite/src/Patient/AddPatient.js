@@ -8,11 +8,14 @@ const CreatePatientForm = () => {
   const [password, setPassword] = useState('');
   const [isActive, setIsActive] = useState(false);
   let [role, setRole] = useState('User');
+  
 
   const [nameTouched, setNameTouched] = useState(false);
   const [userNameTouched, setUserNameTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [roleTouched, setRoleTouched] = useState(false);
+
+  let [patientNumber, setPatientNumber] = useState(null)
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -53,7 +56,6 @@ const CreatePatientForm = () => {
       isActive: isActive,
       role: role
     }
-    console.log(data);
     fetch(`${endpoint.Patient}`, {
       method: 'POST',
       headers: {
@@ -64,27 +66,38 @@ const CreatePatientForm = () => {
     })
       .then(response => {
         if (!response.ok) {
-          if (response.status === 400) {
-            alert("Data provided is invalid");
+          switch (response.status) {
+            case 400:
+              alert("Data provided is invalid");  
+              break;
+            case 401:
+              alert("Login needed")
+              break;
+            case 409:
+              alert("Username already exists")
+              break;
+            default:
+              alert(`System is unavailable for patient creation`)
+              break;
           }
-          if (response.status === 401) {
-            alert("Login needed")
-          }
-          alert(`System is unavailable for patient creation \n ${response.json().then(json => alert(JSON.stringify(json)))}`)
         } else {
-          alert("Patient created successfully")
-          console.log(JSON.stringify(response.json()))
           setName('');
           setUsername('');
           setPassword('');
           setIsActive(false);
           setRole('User');
+          setNameTouched(false);
+          setUserNameTouched(false);
+          setPasswordTouched(false);
+          setRoleTouched(false);
+          return response.json();
         }
-
+      }).then(data => {
+        debugger
+        patientNumber = data.id;
+        alert(`Patient created successfully, your patient number is: ${patientNumber}`)
       })
       .catch(error => console.error('Error fetching patient:', error));
-
-
   };
 
   return (

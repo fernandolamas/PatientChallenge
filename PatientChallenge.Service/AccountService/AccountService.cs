@@ -28,8 +28,12 @@ namespace PatientChallenge.Service.AccountService
                     string query = $"SELECT * from Patients p where p.UserName = '{userLogin.UserName}'";
                     patient = await conn.QueryFirstOrDefaultAsync<Patient>(query);
                 }
+                if(patient == null)
+                {
+                    throw new ArgumentException("Invalid credentials");
+                }
                 bool isPasswordCorrect = _encryptService.VerifyPassword(userLogin.Password, patient.Password ?? string.Empty);
-                if (patient != null && isPasswordCorrect)
+                if (isPasswordCorrect)
                 {
                     Token = JwtHelper.GenTokenKey(
                         new UserToken()

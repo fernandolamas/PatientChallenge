@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AddPatientForm from './AddPatient';
 import { endpoint } from '../endpoints';
 
 const UpdatePatient = () => {
@@ -8,12 +7,14 @@ const UpdatePatient = () => {
   const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isActive, setIsActive] = useState(false);
-  const [role, setRole] = useState('User');
+  let [role, setRole] = useState('User');
 
   const [nameTouched, setNameTouched] = useState(false);
   const [userNameTouched, setUserNameTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [roleTouched, setRoleTouched] = useState(false);
+
+  let [patient, setPatient] = useState(null);
 
   const handleIdChange = (e) => {
     setId(e.target.value);
@@ -46,6 +47,13 @@ const UpdatePatient = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    
+    if (role == "User") {
+      role = 1;
+    } else {
+      role = 0;
+    }
+
     let data = {
       id: id,
       name: name,
@@ -54,49 +62,62 @@ const UpdatePatient = () => {
       isActive: isActive,
       role: role
     }
-    fetch(`${endpoint.Account}`, {
-      method: 'POST',
+    fetch(`${endpoint.Patient}`, {
+      method: 'PUT',
       headers: {
+        'Authorization': `Bearer ${localStorage.getItem("JWTTOKEN")}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     })
       .then(response => {
         if (!response.ok) {
-          if (response.status === 404) {
-            alert("Patient not found");
+          switch (response.status) {
+            case 400:
+              alert("Data provided is invalid");  
+              break;
+            case 401:
+              alert("Login needed")
+              break;
+            case 409:
+              alert("Username already exists")
+              break;
+            default:
+              alert(`System is unavailable for patient creation`)
+              break;
           }
-          if (response.status === 401) {
-            alert("Login needed")
-          }
+        }else{
+          // Reset form fields after submission
+          setName('');
+          setUsername('');
+          setPassword('');
+          setIsActive(false);
+          setRole('User');
+          setNameTouched(false);
+          setUserNameTouched(false);
+          setPasswordTouched(false);
+          setRoleTouched(false);
+          return response.json();
         }
-        return response.json();
       })
       .then(data => {
         console.log('Server response', data);
-        const successMessage = document.createElement('div');
-        successMessage.textContent = 'Patient updated successfully';
-        document.body.appendChild(successMessage);
+        setPatient(data);
       })
       .catch(error => {
         console.error('Error sending request', error);
       });
 
-    // Reset form fields after submission
-    setName('');
-    setUsername('');
-    setPassword('');
-    setIsActive(false);
-    setRole('User');
+
   };
 
 
   return (
     <div className="container mt-5">
-      <h2>Update Patient</h2>
+      <h2>Update an existing patient</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="id" className="form-label">Patient Number:</label>
+          <label htmlFor="id" className="form-label">Patient number to be updated</label>
           <input
             type="text"
             className="form-control"
@@ -104,6 +125,9 @@ const UpdatePatient = () => {
             value={id}
             onChange={handleIdChange}
           />
+        </div>
+        <div className="mb-3">
+          <p>Complete the blank fields with new information</p>
         </div>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Name:</label>
@@ -174,7 +198,17 @@ const UpdatePatient = () => {
           ) : null}
         </div>
         <button type="submit" className="btn btn-primary">Create Patient</button>
+        
       </form>
+      {patient && (
+        <div className="mt-4">
+          <h3>Patient Information</h3>
+          <p><strong>Name:</strong> {patient.name}</p>
+          <p><strong>Username:</strong> {patient.userName}</p>
+          <p><strong>Password:</strong> {patient.password}</p>
+          <p><strong>Is Active:</strong> {patient.isActive ? 'Yes' : 'No'}</p>
+          <p><strong>Role:</strong> {patient.role}</p>
+        </div>)}
     </div>
 
   );

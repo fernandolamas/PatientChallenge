@@ -10,9 +10,6 @@ const GetPatientById = () => {
   };
 
   const handleFetchPatient = () => {
-    // TODO: Add logic to fetch patient by ID
-    // For this example, let's assume you have an API endpoint to fetch a patient by ID
-    // Replace the API endpoint and add the fetch logic accordingly
     fetch(`${endpoint.Patient}?id=${patientId}`,
       {
         method: 'GET',
@@ -22,12 +19,15 @@ const GetPatientById = () => {
       }
     )
       .then(response => {
-        response.json()
         if (response.status === 404) {
           alert("Not found");
         }
         if (response.status === 401) {
           alert("Login needed")
+        }
+        if(response.status === 200)
+        {
+          return response.json()
         }
       })
       .then(data => setPatient(data))

@@ -64,7 +64,7 @@ const authenticateUser = (username, password) => {
     body: JSON.stringify(data)
   })
   .then(response => {
-    if(response === 401)
+    if(response.status === 401)
     {
       alert("Invalid credentials")
     }else{
